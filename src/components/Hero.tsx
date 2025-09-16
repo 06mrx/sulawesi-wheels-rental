@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Car, MapPin, Globe } from "lucide-react";
 import heroImage from "@/assets/hero-bira.jpg";
+import BookingModal from "@/components/BookingModal";
 
 interface HeroProps {
   language: 'id' | 'en';
@@ -8,6 +10,8 @@ interface HeroProps {
 }
 
 const Hero = ({ language, onLanguageChange }: HeroProps) => {
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  
   const content = {
     id: {
       title: "Jelajahi Sulawesi dengan Nyaman",
@@ -72,6 +76,7 @@ const Hero = ({ language, onLanguageChange }: HeroProps) => {
             <Button 
               size="lg" 
               className="bg-gradient-ocean hover:shadow-medium transition-smooth text-lg px-8 py-6"
+              onClick={() => setShowBookingModal(true)}
             >
               <MapPin className="mr-2 h-5 w-5" />
               {t.cta}
@@ -102,6 +107,12 @@ const Hero = ({ language, onLanguageChange }: HeroProps) => {
           </div>
         </div>
       </div>
+
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        language={language}
+      />
     </section>
   );
 };

@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Users } from "lucide-react";
+import BookingModal from "@/components/BookingModal";
 import biraImage from "@/assets/hero-bira.jpg";
 import torajaImage from "@/assets/toraja.jpg";
 import tempeImage from "@/assets/tempe.jpg";
@@ -12,6 +14,9 @@ interface DestinationsProps {
 }
 
 const Destinations = ({ language }: DestinationsProps) => {
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState("");
+
   const content = {
     id: {
       title: "Destinasi Wisata Populer",
@@ -103,6 +108,28 @@ const Destinations = ({ language }: DestinationsProps) => {
 
   const t = content[language];
 
+  const handleBookNow = (destinationName: string) => {
+    const serviceMap = {
+      id: {
+        "Pantai Bira": "Tour Bira",
+        "Toraja": "Tour Toraja", 
+        "Danau Tempe": "Tour Danau Tempe",
+        "Malino": "Tour Malino",
+        "Rammang-Rammang": "Tour Rammang-Rammang"
+      },
+      en: {
+        "Bira Beach": "Bira Tour",
+        "Toraja": "Toraja Tour",
+        "Lake Tempe": "Lake Tempe Tour", 
+        "Malino": "Malino Tour",
+        "Rammang-Rammang": "Rammang-Rammang Tour"
+      }
+    };
+    
+    setSelectedDestination(serviceMap[language][destinationName] || "Custom Destinasi");
+    setShowBookingModal(true);
+  };
+
   return (
     <section className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,6 +144,10 @@ const Destinations = ({ language }: DestinationsProps) => {
             variant="outline" 
             size="lg"
             className="border-secondary text-secondary hover:bg-gradient-sunset hover:text-white transition-smooth"
+            onClick={() => {
+              setSelectedDestination("Custom Destinasi");
+              setShowBookingModal(true);
+            }}
           >
             <MapPin className="mr-2 h-5 w-5" />
             {t.custom}
@@ -160,6 +191,7 @@ const Destinations = ({ language }: DestinationsProps) => {
                 <Button 
                   className="w-full bg-gradient-ocean hover:shadow-medium transition-smooth"
                   size="sm"
+                  onClick={() => handleBookNow(destination.name)}
                 >
                   {t.cta}
                 </Button>
@@ -168,6 +200,13 @@ const Destinations = ({ language }: DestinationsProps) => {
           ))}
         </div>
       </div>
+
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        language={language}
+        selectedDestination={selectedDestination}
+      />
     </section>
   );
 };

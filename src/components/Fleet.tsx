@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, Fuel, Luggage, Car } from "lucide-react";
+import BookingModal from "@/components/BookingModal";
 import fleetImage from "@/assets/fleet.jpg";
 
 interface FleetProps {
@@ -9,6 +11,8 @@ interface FleetProps {
 }
 
 const Fleet = ({ language }: FleetProps) => {
+  const [showBookingModal, setShowBookingModal] = useState(false);
+
   const content = {
     id: {
       title: "Pilihan Kendaraan",
@@ -174,6 +178,7 @@ const Fleet = ({ language }: FleetProps) => {
                 <Button 
                   className="w-full bg-gradient-ocean hover:shadow-medium transition-smooth"
                   size="sm"
+                  onClick={() => setShowBookingModal(true)}
                 >
                   <Car className="mr-2 h-4 w-4" />
                   {t.cta}
@@ -183,6 +188,12 @@ const Fleet = ({ language }: FleetProps) => {
           ))}
         </div>
       </div>
+
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        language={language}
+      />
     </section>
   );
 };
